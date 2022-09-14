@@ -35,9 +35,11 @@ public class Game
     private void createRooms()
     {
         Room outside, theater, pub, lab, office;
-      
+        Quiz enemy;
+        // create Quizzes
+        enemy = new Quiz("a dangerous enemy rose from the shadows");
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
+        outside = new Room("outside the main entrance of the university", enemy);
         theater = new Room("in a lecture theater");
         pub = new Room("in the campus pub");
         lab = new Room("in a computing lab");
@@ -109,6 +111,9 @@ public class Game
         if (commandWord.equals("help")) {
             printHelp();
         }
+        else if (commandWord.equals("quiz")) {
+            runQuiz(command);
+        }
         else if (commandWord.equals("go")) {
             goRoom(command);
         }
@@ -161,7 +166,17 @@ public class Game
         }
     }
 
-    /** 
+    private void runQuiz(Command command)
+    {
+        if(!currentRoom.hasQuiz()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("There is no quiz to response");
+            return;
+        }
+
+        currentRoom.getQuizDescription();
+    }
+    /**
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.

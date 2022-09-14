@@ -19,6 +19,7 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
+    private Quiz quiz;
 
     /**
      * Create a room described "description". Initially, it has
@@ -26,12 +27,18 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description) 
+    public Room(String description)
     {
         this.description = description;
         exits = new HashMap<>();
     }
 
+    public Room(String description, Quiz quiz)
+    {
+        this.description = description;
+        this.quiz = quiz;
+        exits = new HashMap<>();
+    }
     /**
      * Define an exit from this room.
      * @param direction The direction of the exit.
@@ -86,6 +93,14 @@ public class Room
     public Room getExit(String direction) 
     {
         return exits.get(direction);
+    }
+
+    public boolean hasQuiz() {
+        return this.quiz != null;
+    }
+
+    public void getQuizDescription() {
+        quiz.getDetails();
     }
 }
 

@@ -1,3 +1,4 @@
+package org.example;
 /**
  * This class is part of the "World of Zuul" application. 
  * "World of Zuul" is a very simple, text based adventure game.
@@ -12,7 +13,7 @@
 public class CommandWords
 {
     // a constant array that holds all valid command words
-    private static final String[] validCommands = {
+    private String[] validCommands = {
         "go", "quit", "help", "quiz"
     };
 
@@ -21,7 +22,11 @@ public class CommandWords
      */
     public CommandWords()
     {
-        // nothing to do at the moment...
+        validCommands = new String[] { "go", "quit", "help", "quiz" };
+    }
+    public CommandWords(String[] commands)
+    {
+        validCommands = commands;
     }
 
     /**
@@ -30,8 +35,8 @@ public class CommandWords
      */
     public boolean isCommand(String aString)
     {
-        for(int i = 0; i < validCommands.length; i++) {
-            if(validCommands[i].equals(aString))
+        for (String validCommand : validCommands) {
+            if (validCommand.equals(aString))
                 return true;
         }
         // if we get here, the string was not found in the commands

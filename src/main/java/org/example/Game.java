@@ -1,3 +1,7 @@
+package org.example;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -37,9 +41,12 @@ public class Game
         Room outside, theater, pub, lab, office;
         Quiz enemy;
         // create Quizzes
-        enemy = new Quiz("a dangerous enemy rose from the shadows");
+        enemy = new Quiz("Uma perigosa criatura surge das sombras carregando um objeto brilhante no pescoço");
+        enemy.addOption("1. Atacar a criatura");
+        enemy.addOption("2. Fugir");
+        enemy.addOption("3. Esconder-se");
         // create the rooms
-        outside = new Room("outside the main entrance of the university", enemy);
+        outside = new Room("no saguão escuro com objetos jogados ao chão", enemy);
         theater = new Room("in a lecture theater");
         pub = new Room("in the campus pub");
         lab = new Room("in a computing lab");
@@ -77,7 +84,7 @@ public class Game
             Command command = parser.getCommand();
             finished = processCommand(command);
         }
-        System.out.println("Thank you for playing.  Good bye.");
+        System.out.println("Obrigado por jogar Adventure and Chaos. Tchau.");
     }
 
     /**
@@ -86,9 +93,9 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
-        System.out.println("Type 'help' if you need help.");
+        System.out.println("Bem vindo ao Adventure and Chaos!");
+        System.out.println("Adventure and Chaos é um incrível novo jogo de aventura.");
+        System.out.println("Digite '" + "help" + "' se você precisa de ajuda.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
     }
@@ -100,28 +107,28 @@ public class Game
      */
     private boolean processCommand(Command command) 
     {
-        boolean wantToQuit = false;
+        AtomicBoolean wantToQuit = new AtomicBoolean(false);
 
         if(command.isUnknown()) {
-            System.out.println("I don't know what you mean...");
+            System.out.println("Eu não sei o que você quis dizer...");
             return false;
         }
 
         String commandWord = command.getCommandWord();
-        if (commandWord.equals("help")) {
+        if ("help".equals(commandWord)) {
             printHelp();
         }
-        else if (commandWord.equals("quiz")) {
+        else if ("quiz".equals(commandWord)) {
             runQuiz(command);
         }
-        else if (commandWord.equals("go")) {
+        else if ("go".equals(commandWord)) {
             goRoom(command);
         }
-        else if (commandWord.equals("quit")) {
-            wantToQuit = quit(command);
+        else if ("quit".equals(commandWord)) {
+            wantToQuit.set(quit(command));
         }
         // else command not recognised.
-        return wantToQuit;
+        return wantToQuit.get();
     }
 
     // implementations of user commands:
@@ -133,22 +140,22 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("Você está perdido. Você esta sozinho. Você vagueia");
+        System.out.println("Em um castelo abandonado.");
         System.out.println();
-        System.out.println("Your command words are:");
+        System.out.println("Seus comandos são:");
         parser.showCommands();
     }
 
     /** 
-     * Try to in to one direction. If there is an exit, enter the new
+     * Try to go in one direction. If there is an exit, enter the new
      * room, otherwise print an error message.
      */
     private void goRoom(Command command) 
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
-            System.out.println("Go where?");
+            System.out.println("Ir aonde?");
             return;
         }
 
@@ -158,7 +165,7 @@ public class Game
         Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
-            System.out.println("There is no door!");
+            System.out.println("Não há porta");
         }
         else {
             currentRoom = nextRoom;
@@ -170,24 +177,24 @@ public class Game
     {
         if(!currentRoom.hasQuiz()) {
             // if there is no second word, we don't know where to go...
-            System.out.println("There is no quiz to response");
+            System.out.println("Não há um quiz nesta sala para responder");
             return;
         }
 
-        currentRoom.getQuizDescription();
+        Quiz quiz = currentRoom.quiz;
+        quiz.start();
     }
-    /**
+    /** 
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.
      */
-    private boolean quit(Command command) 
+    private boolean quit(Command command)
     {
-        if(command.hasSecondWord()) {
-            System.out.println("Quit what?");
+        if (command.hasSecondWord()) {
+            System.out.println("Sair o que?");
             return false;
-        }
-        else {
+        } else {
             return true;  // signal that we want to quit
         }
     }

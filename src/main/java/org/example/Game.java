@@ -23,14 +23,16 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Person currentPerson;
         
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
-        createRooms();
         parser = new Parser();
+        currentPerson = new Person();
+        createRooms();
     }
 
     /**
@@ -40,11 +42,15 @@ public class Game
     {
         Room outside, theater, pub, lab, office;
         Quiz enemy;
+
+        Item item = new Item("objeto lendário");
+        Action action = new Action(currentPerson, person -> currentPerson.addItem(item));
         // create Quizzes
         enemy = new Quiz("Uma perigosa criatura surge das sombras carregando um objeto brilhante no pescoço");
-        enemy.addOption("1. Atacar a criatura");
-        enemy.addOption("2. Fugir");
-        enemy.addOption("3. Esconder-se");
+        enemy.addOption("1. Atacar a criatura", true, action);
+        enemy.addOption("2. Fugir", false);
+        enemy.addOption("3. Esconder-se", false);
+
         // create the rooms
         outside = new Room("no saguão escuro com objetos jogados ao chão", enemy);
         theater = new Room("in a lecture theater");
@@ -123,6 +129,9 @@ public class Game
         }
         else if ("go".equals(commandWord)) {
             goRoom(command);
+        }
+        else if ("items".equals(commandWord)) {
+            currentPerson.displayItens();
         }
         else if ("quit".equals(commandWord)) {
             wantToQuit.set(quit(command));

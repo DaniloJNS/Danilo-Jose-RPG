@@ -2,8 +2,6 @@ package org.example;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.lang.Thread.*;
-
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -45,21 +43,25 @@ public class Game
         Room boss_room, dining_room, grain_deposity, wine_house, dormitory, antechamber, guard_room, ritual_chamber;
 
         // create the rooms
-        boss_room = new Room("boss room", "em um altar temos duas cobras");
+        boss_room = new Room("boss room", "você entra lentamente no lugar e vê na frente um largo altar e ao fundo um ser com aparência aterrorizante de grande porte " +
+                "sendo escoltado por outros dois seres de porte menor ainda assim maiores que uma pessoa comum");
         antechamber = new Room("antechamber", "Uma estatua do rei Carlos II decora a sala");
         dormitory = new Room("dormitory",
                 "As camas estão desarrumadas como as pessoas tivessem saídos repentinamente");
         ritual_chamber = new Room("ritual chamber",
-                        "No centro da sala, um monte com uma grande quantidade de sangue humano, " +
-                                  "em cada canto da sala surge uma grande cobra com a boca ensanguentada");
+                "No centro da sala, um monte com uma grande quantidade de sangue humano, " +
+                "em cada canto da sala surge uma grande cobra com a boca ensanguentada");
         guard_room = new Room("guard room",
-                     "Dois corpos de guardas em decomposição jogados pelo chão," +
-                              "com enormes buracos na região abdominal");
-        dining_room = new Room("The servant's dining room", "Uma mesa com vários restos de alimentos " +
-                                "e um escudo está apoiado numa pequena estante");
-        grain_deposity = new Room("grain deposit", "O lugar está lotado de alimentos com alguns sacos" +
+                "Dois corpos de guardas em decomposição jogados pelo chão," +
+                "com enormes buracos na região abdominal");
+        dining_room = new Room("The servant's dining room",
+                "Uma mesa com vários restos de alimentos " +
+                "e um escudo está apoiado numa pequena estante");
+        grain_deposity = new Room("grain deposit",
+                "O lugar está lotado de alimentos com alguns sacos" +
                 " de grãos derrubados e ao centro um buracos em formato de cobra com cheiro desagradável");
-        wine_house = new Room("wine house", "Uma adega de vinhos com marcas de luta, num canto pode ser vistos, um monte de " +
+        wine_house = new Room("wine house",
+                "Uma adega de vinhos com marcas de luta, num canto pode ser vistos, um monte de " +
                 "caveiras pequenas humana e ao centro um buraco em formato de cobra com cheiro desagradável");
 
         boss_room.setExit("sul", antechamber);
@@ -86,7 +88,7 @@ public class Game
         wine_house.setExit("norte", ritual_chamber);
         wine_house.setExit("oeste", dining_room);
 
-        currentRoom = dining_room;  // start game boss_room
+        currentRoom = dining_room;  // start game the servant's dining room
 
         Quiz enemy;
         Item item = new Item("objeto lendário");
@@ -103,6 +105,7 @@ public class Game
             System.out.println("A criatura te encontra e ataca letalmente!!!!");
             person.kill();
         });
+
         // create Quizzes
         enemy = new Quiz("Uma perigosa criatura surge das sombras carregando um objeto brilhante no pescoço");
         enemy.addOption("1. Atacar a criatura", earned);
@@ -110,6 +113,25 @@ public class Game
         enemy.addOption("3. Esconder-se", defeat);
 
         wine_house.setQuiz(enemy);
+
+        Item escudo = new Item("Escudo normal");
+        Item key = new Item("Chave pequena");
+        Action get_key = new Action(currentPerson, person -> {
+            System.out.println("Um chave pequena foi adicionado ao inventario!");
+            person.addItem(key);
+        });
+
+        earned = new Action(currentPerson, person -> {
+          System.out.println("Um escudo foi adicionado ao inventario!");
+          person.addItem(escudo);
+        });
+
+        Quiz search = new Quiz("Na estante ao canto e embaixo da mesa, você consegue notar que existem objetos esquecidos");
+        search.addOption("1. Procurar pela sala", get_key);
+        search.addOption("2. Pega o estudo na estante", earned);
+        search.addOption("3. Não fazer nada");
+
+        dining_room.setQuiz(search);
     }
 
     /**
@@ -168,8 +190,8 @@ public class Game
         else if ("go".equals(commandWord)) {
             goRoom(command);
         }
-        else if ("items".equals(commandWord)) {
-            currentPerson.displayItens();
+        else if ("inventario".equals(commandWord)) {
+            currentPerson.displayInventory();
         }
         else if ("quit".equals(commandWord)) {
             wantToQuit.set(quit(command));

@@ -24,25 +24,35 @@ public class Quiz {
 
     public void start() {
         display();
-        Command command = parse.getCommand();
-        processCommand(command.getCommandWord());
+        while (!processCommand(parse.getCommand().getCommandWord()));
     }
 
     private void display() {
         getDetails();
-        options.forEach(Option::display);
+        options.forEach(option -> {
+            if (option.isActive()) {
+                option.display();
+            }
+        });
     }
 
-    private void processCommand(String response) {
+    private boolean processCommand(String response) {
         if (response == null) {
             System.out.println("Ops!!! resposta invalida");
-            return;
+            return false;
         }
 
         int option_index = Integer.parseInt(response);
 
         Option option = options.get(option_index - 1);
 
+        if (!option.isActive()) {
+            System.out.println("Ops!!! Está ação já foi executada");
+            return true;
+        }
+
         option.runActions();
+
+        return true;
     }
 }

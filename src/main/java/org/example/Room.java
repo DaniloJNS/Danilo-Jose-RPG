@@ -1,4 +1,6 @@
 package org.example;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.HashMap;
 
@@ -32,7 +34,7 @@ public class Room
      * @param name  The room's name.
      * @param description  THe room's description
      */
-    public Room(String name, String description)
+    public Room(String name, String description, Action ...actions)
     {
         this.description = description;
         this.name = name;

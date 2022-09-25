@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 public class Person {
-    private final ArrayList<Item> items;
+    private final ArrayList<Item> inventory;
     private boolean alive;
 
     public Person() {
-        this.items = new ArrayList<>();
+        this.inventory = new ArrayList<>();
         this.alive = true;
     }
 
-    public void addItem(Item item) { items.add(item); }
+    public void addItem(Item item) { inventory.add(item); }
 
-    public void displayItens() {
-        if (items.size() > 0) {
-            IntStream.range(0, items.size())
-                    .mapToObj(i -> i + ". " + items.get(i).getName())
+    public void displayInventory() {
+        if (inventory.size() > 0) {
+            IntStream.range(0, inventory.size())
+                    .mapToObj(i -> i + ". " + inventory.get(i).getName())
                     .forEach(System.out::println);
             return;
         }

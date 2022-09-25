@@ -7,10 +7,17 @@ public class Option {
     private final String name;
     private final ArrayList<Action> actions;
 
+    private boolean active;
+
     public Option(String name, Action ...actions) {
         this.name = name;
         this.actions = new ArrayList<>();
+        this.active = true;
         setActions(actions);
+    }
+
+    public boolean isActive() {
+        return this.active;
     }
 
     public void display() {
@@ -18,7 +25,10 @@ public class Option {
     }
 
     public void runActions() {
-        actions.forEach(Action::run);
+        if (actions.size() > 0) {
+            actions.forEach(Action::run);
+            this.active = false;
+        }
     }
 
     private void setActions(Action ...actions) {

@@ -22,7 +22,7 @@ public class CommandWords
      */
     public CommandWords()
     {
-        validCommands = new String[] { "go", "quit", "help", "quiz", "items"};
+        validCommands = new String[] { "go", "quit", "help", "quiz", "inventario"};
     }
     public CommandWords(String[] commands)
     {

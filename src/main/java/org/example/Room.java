@@ -1,7 +1,6 @@
 package org.example;
 import java.util.Set;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Class Room - a room in an adventure game.
@@ -20,24 +19,38 @@ import java.util.Iterator;
 public class Room 
 {
     private final String description;
+    private final String name;
     private final HashMap<String, Room> exits;        // stores exits of this room.
 
     public Quiz quiz;
 
     /**
-     * Create a room described "description". Initially, it has
-     * no exits. "description" is something like "a kitchen" or
+     * Create a room described "name". Initially, it has
+     * no exits. "name" is something like "a kitchen" or
      * "an open court yard".
-     * @param description The room's description.
+     *
+     * @param name  The room's name.
+     * @param description  THe room's description
      */
-    public Room(String description) 
+    public Room(String name, String description)
     {
         this.description = description;
+        this.name = name;
         exits = new HashMap<>();
     }
 
-    public Room(String description, Quiz quiz)
+    /**
+     * Create a room described "name". Initially, it has
+     * no exits. "name" is something like "a kitchen" or
+     * "an open court yard".
+     *
+     * @param name  The room's name.
+     * @param description  The room's description
+     * @param quiz  The room's quiz interaction
+     */
+    public Room(String name, String description, Quiz quiz)
     {
+        this.name = name;
         this.description = description;
         this.quiz = quiz;
         exits = new HashMap<>();
@@ -69,7 +82,7 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "Você está " + description + ".\n" + getExitString();
+        return "Você está em " + name + ".\n" + description + ".\n" + getExitString();
     }
 
     /**

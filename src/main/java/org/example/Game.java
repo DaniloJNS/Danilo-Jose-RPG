@@ -45,14 +45,22 @@ public class Game
         Room boss_room, dining_room, grain_deposity, wine_house, dormitory, antechamber, guard_room, ritual_chamber;
 
         // create the rooms
-        boss_room = new Room("no saguão escuro com objetos jogados ao chão");
-        antechamber = new Room("in the computing admin dormitory");
-        dormitory = new Room("in the computing admin dormitory");
-        ritual_chamber = new Room("Uma sala macabra");
-        guard_room = new Room("in guard room");
-        dining_room = new Room("in a lecture dining_room");
-        grain_deposity = new Room("in the campus grain_deposity");
-        wine_house = new Room("in a computing wine_house");
+        boss_room = new Room("boss room", "em um altar temos duas cobras");
+        antechamber = new Room("antechamber", "Uma estatua do rei Carlos II decora a sala");
+        dormitory = new Room("dormitory",
+                "As camas estão desarrumadas como as pessoas tivessem saídos repentinamente");
+        ritual_chamber = new Room("ritual chamber",
+                        "No centro da sala, um monte com uma grande quantidade de sangue humano, " +
+                                  "em cada canto da sala surge uma grande cobra com a boca ensanguentada");
+        guard_room = new Room("guard room",
+                     "Dois corpos de guardas em decomposição jogados pelo chão," +
+                              "com enormes buracos na região abdominal");
+        dining_room = new Room("The servant's dining room", "Uma mesa com vários restos de alimentos " +
+                                "e um escudo está apoiado numa pequena estante");
+        grain_deposity = new Room("grain deposit", "O lugar está lotado de alimentos com alguns sacos" +
+                " de grãos derrubados e ao centro um buracos em formato de cobra com cheiro desagradável");
+        wine_house = new Room("wine house", "Uma adega de vinhos com marcas de luta, num canto pode ser vistos, um monte de " +
+                "caveiras pequenas humana e ao centro um buraco em formato de cobra com cheiro desagradável");
 
         boss_room.setExit("sul", antechamber);
 

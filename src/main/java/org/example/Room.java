@@ -19,8 +19,9 @@ import java.util.Iterator;
 
 public class Room 
 {
-    private String description;
-    private HashMap<String, Room> exits;        // stores exits of this room.
+    private final String description;
+    private final HashMap<String, Room> exits;        // stores exits of this room.
+
     public Quiz quiz;
 
     /**
@@ -68,7 +69,7 @@ public class Room
      */
     public String getLongDescription()
     {
-        return "You are " + description + ".\n" + getExitString();
+        return "Você está " + description + ".\n" + getExitString();
     }
 
     /**
@@ -78,7 +79,7 @@ public class Room
      */
     private String getExitString()
     {
-        StringBuilder returnString = new StringBuilder("Exits:");
+        StringBuilder returnString = new StringBuilder("Portas:");
         Set<String> keys = exits.keySet();
         for(String exit : keys) {
             returnString.append(" ").append(exit);
@@ -95,6 +96,11 @@ public class Room
     public Room getExit(String direction) 
     {
         return exits.get(direction);
+    }
+
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
     }
 
     public boolean hasQuiz() {

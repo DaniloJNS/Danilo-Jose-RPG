@@ -13,8 +13,8 @@ public class Quiz {
         this.options = new ArrayList<>();
     }
 
-    public void addOption(String question, boolean isCorrect, Action ...action) {
-        Option option = new Option(question, isCorrect, action);
+    public void addOption(String question, Action ...action) {
+        Option option = new Option(question, action);
         options.add(option);
     }
 

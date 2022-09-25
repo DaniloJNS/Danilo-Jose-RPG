@@ -2,6 +2,8 @@ package org.example;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static java.lang.Thread.*;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -40,39 +42,66 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
-        Quiz enemy;
-
-        Item item = new Item("objeto lendário");
-        Action action = new Action(currentPerson, person -> currentPerson.addItem(item));
-        // create Quizzes
-        enemy = new Quiz("Uma perigosa criatura surge das sombras carregando um objeto brilhante no pescoço");
-        enemy.addOption("1. Atacar a criatura", true, action);
-        enemy.addOption("2. Fugir", false);
-        enemy.addOption("3. Esconder-se", false);
+        Room boss_room, dining_room, grain_deposity, wine_house, dormitory, antechamber, guard_room, ritual_chamber;
 
         // create the rooms
-        outside = new Room("no saguão escuro com objetos jogados ao chão", enemy);
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
-        
-        // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
+        boss_room = new Room("no saguão escuro com objetos jogados ao chão");
+        antechamber = new Room("in the computing admin dormitory");
+        dormitory = new Room("in the computing admin dormitory");
+        ritual_chamber = new Room("Uma sala macabra");
+        guard_room = new Room("in guard room");
+        dining_room = new Room("in a lecture dining_room");
+        grain_deposity = new Room("in the campus grain_deposity");
+        wine_house = new Room("in a computing wine_house");
 
-        theater.setExit("west", outside);
+        boss_room.setExit("sul", antechamber);
 
-        pub.setExit("east", outside);
+        antechamber.setExit("norte", boss_room);
+        antechamber.setExit("sul", guard_room);
+        antechamber.setExit("leste", ritual_chamber);
+        antechamber.setExit("oeste", dormitory);
 
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
+        guard_room.setExit("norte", antechamber);
 
-        office.setExit("west", lab);
+        ritual_chamber.setExit("sul", wine_house);
+        ritual_chamber.setExit("oeste", antechamber);
 
-        currentRoom = outside;  // start game outside
+        dormitory.setExit("sul", grain_deposity);
+        dormitory.setExit("leste", antechamber);
+
+        grain_deposity.setExit("norte", dormitory);
+        grain_deposity.setExit("leste", dining_room);
+
+        dining_room.setExit("leste", wine_house);
+        dining_room.setExit("oeste", grain_deposity);
+
+        wine_house.setExit("norte", ritual_chamber);
+        wine_house.setExit("oeste", dining_room);
+
+        currentRoom = dining_room;  // start game boss_room
+
+        Quiz enemy;
+        Item item = new Item("objeto lendário");
+        Action earned = new Action(currentPerson, person -> person.addItem(item));
+        Action goTO = new Action(currentPerson, person -> {
+            currentRoom = wine_house.getExit("norte");
+            System.out.println(currentRoom.getLongDescription());
+        });
+        Action defeat = new Action(currentPerson, person -> {
+            System.out.println("A criatura se move pela sala e percebe um cheiro estranho de um ser");
+            System.out.println("Intrigada, começar a rastrear o ser usando seu olfato bastante aguçado");
+            System.out.println("Você percebe que ela está cada vez mais perto do seu esconderijo");
+            System.out.println("SURPRESA!!!!");
+            System.out.println("A criatura te encontra e ataca letalmente!!!!");
+            person.kill();
+        });
+        // create Quizzes
+        enemy = new Quiz("Uma perigosa criatura surge das sombras carregando um objeto brilhante no pescoço");
+        enemy.addOption("1. Atacar a criatura", earned);
+        enemy.addOption("2. Fugir", goTO);
+        enemy.addOption("3. Esconder-se", defeat);
+
+        wine_house.setQuiz(enemy);
     }
 
     /**
@@ -86,10 +115,11 @@ public class Game
         // execute them until the game is over.
                 
         boolean finished = false;
-        while (! finished) {
+        while (!finished && currentPerson.isAlive()) {
             Command command = parser.getCommand();
             finished = processCommand(command);
         }
+
         System.out.println("Obrigado por jogar Adventure and Chaos. Tchau.");
     }
 

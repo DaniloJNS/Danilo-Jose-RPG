@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 public class Person {
-    private ArrayList<Item> items;
+    private final ArrayList<Item> items;
+    private boolean alive;
 
     public Person() {
         this.items = new ArrayList<>();
+        this.alive = true;
     }
 
     public void addItem(Item item) { items.add(item); }
@@ -21,5 +23,14 @@ public class Person {
         }
 
         System.out.println("Inventario vazio");
+    }
+
+    public void kill() {
+        alive = false;
+        System.out.println("Você está morto, GAME-OVER");
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }
